@@ -32,6 +32,21 @@ The number of nodes in the list is sz.
 #         self.next = next
 class Solution:
     
+    def one_pass_solution(self, head: ListNode, n: int) -> ListNode:
+        dummy = ListNode(next=head)
+        first, second = dummy, dummy
+        
+        for i in range(n+1):
+            first = first.next
+        
+        while first:
+            first = first.next
+            second = second.next
+            
+        second.next = second.next.next
+        
+        return dummy.next
+    
     def base_two_pass_solution(self, head: ListNode, n: int) -> ListNode:        
         before_root = ListNode(next=head)
         nodes_count = 0
@@ -39,23 +54,17 @@ class Solution:
         while head:
             nodes_count+=1
             head = head.next
+    
+        nodes_count-=n
         
-        counter = 0
-        target = nodes_count - n + 1
-        
-        prev_node, head = before_root, before_root.next
-
-        while head:
-            counter+=1
-            if counter == target:
-                prev_node.next = head.next
-                break
-            else:
-                prev_node = head
-            head = head.next
-        
+        first_node = before_root
+        while nodes_count:
+            nodes_count-=1
+            first_node = first_node.next
+        first_node.next = first_node.next.next
         return before_root.next
             
     
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        return self.one_pass_solution(head, n)
         return self.base_two_pass_solution(head, n)
