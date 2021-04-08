@@ -40,26 +40,25 @@ Recursive solution is trivial, could you do it iteratively?
 #         self.right = right
 class Solution:
     def iterativePostorderTraversal(self, root: TreeNode, res: List[int]):
-        if not root:
-            return res
-        
-        visited = set()
-        stack = [root]
-        while stack:
-            top = stack[-1]
-            # 1) leaf case - left and right are None
-            # 2) both set and both visited
-            # 3) only right is set and right is visited
-            # 4) only left is set and left is visited
-            if (not top.left and not top.right) or (top.left and top.right and top.left in visited and top.right in visited) or (top.right and top.right in visited) or (top.left and top.left in visited):
-                res.append(top.val)
-                visited.add(top)
+        stack = []
+        while True:
+            while root:
+                if root.right:
+                    stack.append(root.right)
+                stack.append(root)
+                root = root.left
+            
+            if len(stack) == 0:
+                break
+            
+            root = stack.pop()
+            if stack and root.right is not None and stack[-1] == root.right:
                 stack.pop()
+                stack.append(root)
+                root = root.right
             else:
-                if top.right and top.right not in visited:
-                    stack.append(top.right)
-                if top.left and top.left not in visited:
-                    stack.append(top.left)
+                res.append(root.val)
+                root = None
                 
     def recursivePostorderTraversal(self, root: TreeNode, res: List[int]):
         if not root:

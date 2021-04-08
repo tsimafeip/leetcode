@@ -55,7 +55,7 @@ class Solution:
     
     def recursive_solution(self, root: TreeNode, k: int) -> int:
         def inorder(root: TreeNode) -> List[int]:
-            return inorder(root.left) + [root.val] + inorder(root.left) if root else []
+            return inorder(root.left) + [root.val] + inorder(root.right) if root else []
 #             if not root:
 #                 return
 

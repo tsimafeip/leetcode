@@ -42,24 +42,18 @@ Recursive solution is trivial, could you do it iteratively?
 #         self.right = right
 class Solution:
     def iterativeInorderTraversal(self, root: TreeNode, res: List[int]):
-        if not root:
-            return res
-        
-        visited = set()
-        stack = [root]
-        while stack:
-            top = stack[-1]
-            if not top.left or top.left in visited:
-                res.append(top.val)
-                visited.add(top)
-                stack.pop()
-                if top.right:
-                    stack.append(top.right)
-            else:
-                left = top.left
-                while left:
-                    stack.append(left)
-                    left = left.left
+        stack = []
+        while True:
+            while root:
+                stack.append(root)
+                root = root.left
+
+            if len(stack) == 0:
+                break
+
+            root = stack.pop()
+            res.append(root.val)
+            root = root.right
                 
     def recursiveInorderTraversal(self, root: TreeNode, res: List[int]):
         if not root:
